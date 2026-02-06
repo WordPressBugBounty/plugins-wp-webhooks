@@ -26,7 +26,6 @@ if ( ! class_exists( 'WP_Webhooks_Integrations_wordpress_Helpers_comment_helpers
 							if( $svalue == 'ironikus-delete' ){
 								delete_comment_meta( $comment_id, $skey );
 							} else {
-
 								$ident = 'ironikus-serialize';
 								if( is_string( $svalue ) && substr( $svalue , 0, strlen( $ident ) ) === $ident ){
 									$serialized_value = trim( str_replace( $ident, '', $svalue ),' ' );
@@ -38,7 +37,7 @@ if ( ! class_exists( 'WP_Webhooks_Integrations_wordpress_Helpers_comment_helpers
 									update_comment_meta( $comment_id, $skey, $serialized_value );
 
 								} else {
-									update_comment_meta( $comment_id, $skey, maybe_unserialize( $svalue ) );
+									update_comment_meta( $comment_id, $skey, $svalue );
 								}
 
 							}
@@ -69,7 +68,7 @@ if ( ! class_exists( 'WP_Webhooks_Integrations_wordpress_Helpers_comment_helpers
 									update_comment_meta( $comment_id, $meta_key, $serialized_value );
 
 								} else {
-									update_comment_meta( $comment_id, $meta_key, maybe_unserialize( $meta_value ) );
+									update_comment_meta( $comment_id, $meta_key, $meta_value );
 								}
 							}
 						}

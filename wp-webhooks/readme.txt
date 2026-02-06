@@ -1,12 +1,12 @@
 === WP Webhooks - Automate repetitive tasks by creating powerful automation workflows directly within WordPress ===
 Author URI: https://wp-webhooks.com/about/
 Plugin URI: https://wp-webhooks.com/
-Contributors: ironikus
+Contributors: ironikus, cozmoslabs
 Donate link: https://wp-webhooks.com/pricing/
 Tags: webhooks, automation, automate, automator, zapier, api, connector, integrations, automations, create user
 Requires at least: 4.7
-Tested up to: 6.8.2
-Stable Tag: 3.3.7
+Tested up to: 6.9
+Stable Tag: 3.4.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -62,11 +62,16 @@ https://www.youtube.com/watch?v=EfagA_9Uy7o
 * Supports Zapier, Pabbly, Make, Integrately, automate.io and many more
 
 **[Paid Member Subscriptions](https://wp-webhooks.com/integrations/paid-member-subscriptions/) related integrations**
+
 * **Trigger**: Send data once a Payment is created or a specific status is reached
 * **Trigger**: Send data once a Subscription is created or a specific status is reached
 * **Trigger**: Send data before or after a user is created
 
 **[Profile Builder](https://wp-webhooks.com/integrations/profile-builder-by-cozmoslabs/) related integrations**
+
+* **Action**: Approve user
+* **Action**: Unapprove user
+* **Action**: Confirm user email
 * **Trigger**: Send data once a user edits his profile
 * **Trigger**: Send data once a user logs in or registers
 * **Trigger**: Send data once a user confirms his email address
@@ -245,6 +250,16 @@ Here are some of our premium features for [WP Webhooks Pro](https://wp-webhooks.
 * Webhook URL action whitelist
 * In-plugin assistant
 
+AI Integrations
+
+WP Webhooks Pro includes powerful AI integrations to help you build smarter and more dynamic automations:
+
+* [Google Gemini (with Nano Banana support)](https://wp-webhooks.com/integrations/gemini/?utm_source=wp.org&utm_medium=wpw-description-page&utm_campaign=wpwfree)
+* [OpenAI ChatGPT](https://wp-webhooks.com/integrations/openai/?utm_source=wp.org&utm_medium=wpw-description-page&utm_campaign=wpwfree)
+* [Open Router](https://wp-webhooks.com/integrations/openrouter/?utm_source=wp.org&utm_medium=wpw-description-page&utm_campaign=wpwfree)
+
+Use these integrations to connect your WordPress site with modern AI services via webhooks and automate content creation, data processing, and more.
+
 Our premium extensions for [WP Webhooks Pro](https://wp-webhooks.com/?utm_source=wordpress&utm_medium=description&utm_campaign=WP%20Webhooks%20Pro)
 
 * [Create Blog Post Via Email](https://wp-webhooks.com/downloads/wpwh-pro-send-blog-post-by-email/): Yes, it will allow you to create WordPress posts via Email
@@ -290,6 +305,29 @@ If you are looking for a full list of differences between our free and pro versi
 5. Add authentication to every trigger and action for workflow automations
 
 == Changelog ==
+= 3.4.0: Jan 12, 2026 =
+**New Features:**
+
+* New actions for the “Profile Builder" integration: Approve User, Unapprove User, Confirm User Email
+
+= 3.3.9: Nov 17, 2025 =
+
+**Fixed issues:**
+
+* Further fixes regarding unauthenticated arbitrary file copy issue coming from the Contact Form 7 integration when a certain setting was activated. Thanks to Phat RiO - BlueRock and the Patchstack team
+* Fix security issue regarding PHP Object Injection in some cases. Thanks to Phat RiO - BlueRock and the Patchstack team
+* Added allowed file extensions setting for the Contact Form 7 preserve uploaded files functionality. If you have this feature configured, you should edit the trigger and update the allowed extensions. By default only jpg, jpeg and png are allowed
+* Fix installation of custom extensions
+* Fix a PHP 8 deprecation notice
+
+= 3.3.8: Oct 29, 2025 =
+
+**Fixed issues:**
+
+* Fixed issue with the WordPress get_post action returning success even when a post was not actually retrieved
+* Fixed descriptions for the WordPress Create Comment and Update Comment actions, now the interface correctly mentions the meta_input key that is used to populate comment meta
+* Fixed a deprecation error that started appearing with PHP 8.1
+* Fix notice that could be triggered sometimes on the Receive Data tab
 
 = 3.3.7: Sep 02, 2025 =
 **Fixed issues:**
