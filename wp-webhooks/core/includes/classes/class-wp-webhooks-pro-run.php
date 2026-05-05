@@ -168,7 +168,11 @@ class WP_Webhooks_Pro_Run{
 				'ajax_url'   => admin_url( 'admin-ajax.php' ),
 				'ajax_nonce' => wp_create_nonce( md5( $this->page_name ) ),
 				'plugin_url' => WPWH_PLUGIN_URL,
-				'language' => '',
+				'language'   => '',
+				'i18n'       => array(
+					'status_active'   => WPWHPRO()->helpers->translate( 'active', 'wpwhpro-page-actions' ),
+					'status_inactive' => WPWHPRO()->helpers->translate( 'inactive', 'wpwhpro-page-actions' ),
+				),
 			));
 
 			// wp_enqueue_script( 'wpwhpro-admin-scripts-old', WPWH_PLUGIN_URL . 'core/includes/assets-old/dist/js/admin-scripts.js', array( 'jquery' ), WPWH_VERSION, true );
@@ -256,16 +260,26 @@ class WP_Webhooks_Pro_Run{
 			$new_webhook = strtotime( date( 'Y-n-d H:i:s' ) ) . 999 . rand( 10, 9999 );
 		}
 
-        if( ! isset( $webhooks[ $new_webhook ] ) ){
-            WPWHPRO()->webhook->create( $new_webhook, 'trigger', array( 'group' => $webhook_group, 'webhook_url' => $webhook_url ) );
+		$sanitized_webhook_url = WPWHPRO()->webhook->sanitize_trigger_webhook_url( $webhook_url );
 
-	        $response['success']            = true;
-	        $response['webhook']            = $new_webhook;
-	        $response['webhook_group']      = $webhook_group;
-	        $response['webhook_url']        = $webhook_url;
-	        $response['webhook_callback']   = $webhook_callback;
-	        $response['delete_url']         = WPWHPRO()->helpers->built_url( $clean_url, array_merge( $query_params, array( 'wpwhpro_delete' => $new_webhook, ) ) );
-        } else {
+		if ( '' === $sanitized_webhook_url ) {
+			$response['msg'] = WPWHPRO()->helpers->translate( 'Please enter a valid http(s) webhook URL.', 'wpwhpro-page-actions' );
+		} elseif ( 'wpwhflow' === $sanitized_webhook_url ) {
+			$response['msg'] = WPWHPRO()->helpers->translate( 'This webhook URL is reserved for internal use only.', 'wpwhpro-page-actions' );
+		} elseif ( ! isset( $webhooks[ $new_webhook ] ) ) {
+			$created = WPWHPRO()->webhook->create( $new_webhook, 'trigger', array( 'group' => $webhook_group, 'webhook_url' => $sanitized_webhook_url ) );
+
+			if ( $created ) {
+				$response['success']          = true;
+				$response['webhook']          = $new_webhook;
+				$response['webhook_group']    = $webhook_group;
+				$response['webhook_url']      = $sanitized_webhook_url;
+				$response['webhook_callback'] = $webhook_callback;
+				$response['delete_url']       = WPWHPRO()->helpers->built_url( $clean_url, array_merge( $query_params, array( 'wpwhpro_delete' => $new_webhook, ) ) );
+			} else {
+				$response['msg'] = WPWHPRO()->helpers->translate( 'Error while adding the webhook URL.', 'wpwhpro-page-actions' );
+			}
+		} else {
 			$response['msg'] = WPWHPRO()->helpers->translate( 'This key already exists. Please use a different one.', 'wpwhpro-page-actions' );
 		}
 
