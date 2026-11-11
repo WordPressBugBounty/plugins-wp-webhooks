@@ -18,6 +18,16 @@
 class WP_Webhooks_Pro_Helpers {
 
 	/**
+	 * Notice IDs that can be dismissed for good. dismiss_notifications() stores the ID
+	 * as a user meta key, so it accepts only these.
+	 */
+	const DISMISSIBLE_NOTIFICATIONS = array(
+		'wpwh_abilities_notification',
+		'wpwh_bf_2026',
+		'wpwh_payload_policy_notification',
+	);
+
+	/**
      * Variable to check if translations
      * are active or not
      *
@@ -239,8 +249,8 @@ class WP_Webhooks_Pro_Helpers {
     function dismiss_notifications(){
         if( !empty( $_GET['action'] ) && $_GET['action'] === 'wpwh_dismiss_notification' ){
             if( !empty( $_GET['notification'] ) && !empty( $_GET['nonce'] ) ){
-                if( wp_verify_nonce( $_GET['nonce'], 'wpwh_dismiss_notification' ) ){
-                    update_user_meta( get_current_user_id(), sanitize_text_field( $_GET['notification'] ), 'true' );
+                if( wp_verify_nonce( $_GET['nonce'], 'wpwh_dismiss_notification' ) && in_array( $_GET['notification'], self::DISMISSIBLE_NOTIFICATIONS, true ) ){
+                    update_user_meta( get_current_user_id(), $_GET['notification'], 'true' );
 
                     wp_redirect( remove_query_arg( array( 'action', 'notification', 'nonce' ) ) );
                     die();
@@ -966,9 +976,9 @@ class WP_Webhooks_Pro_Helpers {
     public function throw_admin_notices(){
         if( $this->bf_show_promotion() ){
             $message = '<p><strong>Black Friday SALE is live! Get WP Webhooks at a special price.</strong></p>';
-            $message .= '<p>Don\'t miss out on our <strong>only sale of the year & best price you can get</strong>. <br><a class="button-primary" style="margin-top:6px;" href="https://wp-webhooks.com/cyber-monday-black-friday/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=bf2025" target="_blank">Get Deal</a></p>';
+            $message .= '<p>Don\'t miss out on our <strong>only sale of the year & best price you can get</strong>. <br><a class="button-primary" style="margin-top:6px;" href="https://wp-webhooks.com/cyber-monday-black-friday/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=bf2026" target="_blank">Get Deal</a></p>';
 
-            echo '<div style="max-width: 1270px; margin-left: auto; margin-right: auto;">' . $this->create_admin_notice( $message, 'info', false, 'wpwh_bf_notification' ) . '</div>';
+            echo '<div style="max-width: 1270px; margin-left: auto; margin-right: auto;">' . $this->create_admin_notice( $message, 'info', false, 'wpwh_bf_2026' ) . '</div>';
         }
 
         // abilities notice - make users aware that actions can be exposed as WordPress abilities
@@ -1012,8 +1022,8 @@ class WP_Webhooks_Pro_Helpers {
     public function bf_promotion_is_active(){
         
         $black_friday = array(
-            'start_date' => '11/24/2025 00:00',
-            'end_date'   => '12/02/2025 23:59',
+            'start_date' => '11/23/2026 00:00',
+            'end_date'   => '12/01/2026 09:59',
         );
     
         $current_date = time();
